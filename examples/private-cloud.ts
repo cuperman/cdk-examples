@@ -10,6 +10,7 @@ class PrivateCloudStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-ec2.html#vpcnetwork
     new VpcNetwork(this, 'PrivateCloud');
   }
 }

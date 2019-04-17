@@ -11,12 +11,14 @@ class RestApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-lambda.html#function
     const restApiHandler = new Function(this, 'RestApiHandler', {
       code: Code.asset('./handlers/rest-api'),
       handler: 'index.handler',
       runtime: Runtime.NodeJS810
     });
 
+    // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-apigateway.html#lambdarestapi
     new LambdaRestApi(this, 'RestApi', {
       handler: restApiHandler
     });

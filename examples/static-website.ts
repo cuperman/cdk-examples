@@ -11,12 +11,14 @@ class StaticWebsiteStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-s3.html#bucket
     const websiteBucket = new Bucket(this, 'WebsiteBucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html'
     });
 
+    // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-cloudfront.html#cloudfrontwebdistribution
     new CloudFrontWebDistribution(this, 'WebsiteDistribution', {
       originConfigs: [
         {
