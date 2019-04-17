@@ -1,0 +1,377 @@
+Resources:
+  PrivateCloud8ABF1600:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/Resource
+  PrivateCloudPublicSubnet1Subnet68CC0AB0:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/Subnet
+  PrivateCloudPublicSubnet1RouteTableD205C82B:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet1
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/RouteTable
+  PrivateCloudPublicSubnet1RouteTableAssociation12767373:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet1RouteTableD205C82B
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet1Subnet68CC0AB0
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/RouteTableAssociation
+  PrivateCloudPublicSubnet1DefaultRoute9C43811F:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet1RouteTableD205C82B
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrivateCloudIGW4529FD35
+    DependsOn:
+      - PrivateCloudVPCGW274FC782
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/DefaultRoute
+  PrivateCloudPublicSubnet1EIPBFFD2767:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/EIP
+  PrivateCloudPublicSubnet1NATGateway257BB784:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - PrivateCloudPublicSubnet1EIPBFFD2767
+          - AllocationId
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet1Subnet68CC0AB0
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet1
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet1/NATGateway
+  PrivateCloudPublicSubnet2SubnetAA5DC4C7:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.32.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/Subnet
+  PrivateCloudPublicSubnet2RouteTable41A50C91:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet2
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/RouteTable
+  PrivateCloudPublicSubnet2RouteTableAssociation346B0AEA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet2RouteTable41A50C91
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet2SubnetAA5DC4C7
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/RouteTableAssociation
+  PrivateCloudPublicSubnet2DefaultRoute5F2D3D04:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet2RouteTable41A50C91
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrivateCloudIGW4529FD35
+    DependsOn:
+      - PrivateCloudVPCGW274FC782
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/DefaultRoute
+  PrivateCloudPublicSubnet2EIPC20B9878:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/EIP
+  PrivateCloudPublicSubnet2NATGatewayBEECC3D9:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - PrivateCloudPublicSubnet2EIPC20B9878
+          - AllocationId
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet2SubnetAA5DC4C7
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet2
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet2/NATGateway
+  PrivateCloudPublicSubnet3SubnetE64C5A6F:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.64.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet3
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/Subnet
+  PrivateCloudPublicSubnet3RouteTable4CE85298:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet3
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/RouteTable
+  PrivateCloudPublicSubnet3RouteTableAssociationD854FA59:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet3RouteTable4CE85298
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet3SubnetE64C5A6F
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/RouteTableAssociation
+  PrivateCloudPublicSubnet3DefaultRoute9A379F08:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPublicSubnet3RouteTable4CE85298
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrivateCloudIGW4529FD35
+    DependsOn:
+      - PrivateCloudVPCGW274FC782
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/DefaultRoute
+  PrivateCloudPublicSubnet3EIP308EA7E3:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/EIP
+  PrivateCloudPublicSubnet3NATGateway5C8FAAA8:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - PrivateCloudPublicSubnet3EIP308EA7E3
+          - AllocationId
+      SubnetId:
+        Ref: PrivateCloudPublicSubnet3SubnetE64C5A6F
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PublicSubnet3
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PublicSubnet3/NATGateway
+  PrivateCloudPrivateSubnet1Subnet80DFA127:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.96.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet1/Subnet
+  PrivateCloudPrivateSubnet1RouteTable45ED0974:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet1/RouteTable
+  PrivateCloudPrivateSubnet1RouteTableAssociation6C7D91DE:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet1RouteTable45ED0974
+      SubnetId:
+        Ref: PrivateCloudPrivateSubnet1Subnet80DFA127
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet1/RouteTableAssociation
+  PrivateCloudPrivateSubnet1DefaultRouteD90A9FBC:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet1RouteTable45ED0974
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrivateCloudPublicSubnet1NATGateway257BB784
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet1/DefaultRoute
+  PrivateCloudPrivateSubnet2Subnet68F52EF9:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet2/Subnet
+  PrivateCloudPrivateSubnet2RouteTableAD03DC3D:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet2/RouteTable
+  PrivateCloudPrivateSubnet2RouteTableAssociation92A0B6A6:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet2RouteTableAD03DC3D
+      SubnetId:
+        Ref: PrivateCloudPrivateSubnet2Subnet68F52EF9
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet2/RouteTableAssociation
+  PrivateCloudPrivateSubnet2DefaultRouteE65255DD:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet2RouteTableAD03DC3D
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrivateCloudPublicSubnet2NATGatewayBEECC3D9
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet2/DefaultRoute
+  PrivateCloudPrivateSubnet3Subnet1DDF5D70:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.160.0/19
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      AvailabilityZone: us-east-1c
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet3
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet3/Subnet
+  PrivateCloudPrivateSubnet3RouteTableC7961AEC:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud/PrivateSubnet3
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet3/RouteTable
+  PrivateCloudPrivateSubnet3RouteTableAssociation5D5BDA0E:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet3RouteTableC7961AEC
+      SubnetId:
+        Ref: PrivateCloudPrivateSubnet3Subnet1DDF5D70
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet3/RouteTableAssociation
+  PrivateCloudPrivateSubnet3DefaultRoute6A07951F:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateCloudPrivateSubnet3RouteTableC7961AEC
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrivateCloudPublicSubnet3NATGateway5C8FAAA8
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/PrivateSubnet3/DefaultRoute
+  PrivateCloudIGW4529FD35:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: PrivateCloudStack/PrivateCloud
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/IGW
+  PrivateCloudVPCGW274FC782:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: PrivateCloud8ABF1600
+      InternetGatewayId:
+        Ref: PrivateCloudIGW4529FD35
+    Metadata:
+      aws:cdk:path: PrivateCloudStack/PrivateCloud/VPCGW
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=0.28.0,@aws-cdk/aws-cloudwatch=0.28.0,@aws-cdk/aws-ec2=0.28.0,@aws-cdk/aws-iam=0.28.0,@aws-cdk/cdk=0.28.0,@aws-cdk/cx-api=0.28.0,@aws-cdk/region-info=0.28.0,jsii-runtime=node.js/v8.11.2
+

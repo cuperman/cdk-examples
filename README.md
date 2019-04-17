@@ -1,7 +1,10 @@
-# Useful commands
+# CDK Examples
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+View example code and compiled template files.
+
+## Useful commands
+
+* `npm install`     install dependencies
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run synth`   build the template yaml files

@@ -1,0 +1,303 @@
+Resources:
+  RestApiHandlerServiceRole04AE0DEA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                Fn::Join:
+                  - ""
+                  - - lambda.
+                    - Ref: AWS::URLSuffix
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/ServiceRole/Resource
+  RestApiHandler034BA627:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: RestApiHandlerCodeS3Bucket17DDE020
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: RestApiHandlerCodeS3VersionKeyE23BA947
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: RestApiHandlerCodeS3VersionKeyE23BA947
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - RestApiHandlerServiceRole04AE0DEA
+          - Arn
+      Runtime: nodejs8.10
+    DependsOn:
+      - RestApiHandlerServiceRole04AE0DEA
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/Resource
+      aws:asset:path: /Users/jeff/git/aws/cdk-examples/handlers/rest-api
+      aws:asset:property: Code
+  RestApiHandlerApiPermissionANYB5396809:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - RestApiHandler034BA627
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: RestApi0C43BF4B
+            - /
+            - Ref: RestApiDeploymentStageprod3855DE66
+            - /*/
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/ApiPermission.ANY..
+  RestApiHandlerApiPermissionTestANYDB67C9F2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - RestApiHandler034BA627
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: RestApi0C43BF4B
+            - /test-invoke-stage/*/
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/ApiPermission.Test.ANY..
+  RestApiHandlerApiPermissionANYproxy40C5E95C:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - RestApiHandler034BA627
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: RestApi0C43BF4B
+            - /
+            - Ref: RestApiDeploymentStageprod3855DE66
+            - /*/{proxy+}
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/ApiPermission.ANY..{proxy+}
+  RestApiHandlerApiPermissionTestANYproxyEAD41921:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - RestApiHandler034BA627
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: RestApi0C43BF4B
+            - /test-invoke-stage/*/{proxy+}
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApiHandler/ApiPermission.Test.ANY..{proxy+}
+  RestApi0C43BF4B:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: RestApi
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Resource
+  RestApiDeployment180EC503ebba78c9561b2cadb7f6836001263acb:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: RestApi0C43BF4B
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - RestApiproxyANY1786B242
+      - RestApiproxyC95856DD
+      - RestApiANYA7C1DC94
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Deployment/Resource
+  RestApiDeploymentStageprod3855DE66:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: RestApi0C43BF4B
+      DeploymentId:
+        Ref: RestApiDeployment180EC503ebba78c9561b2cadb7f6836001263acb
+      StageName: prod
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/DeploymentStage.prod/Resource
+  RestApiCloudWatchRoleE3ED6605:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                Fn::Join:
+                  - ""
+                  - - apigateway.
+                    - Ref: AWS::URLSuffix
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/CloudWatchRole/Resource
+  RestApiAccount7C83CF5A:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - RestApiCloudWatchRoleE3ED6605
+          - Arn
+    DependsOn:
+      - RestApi0C43BF4B
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Account
+  RestApiproxyC95856DD:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - RestApi0C43BF4B
+          - RootResourceId
+      PathPart: "{proxy+}"
+      RestApiId:
+        Ref: RestApi0C43BF4B
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Default/{proxy+}/Resource
+  RestApiproxyANY1786B242:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Ref: RestApiproxyC95856DD
+      RestApiId:
+        Ref: RestApi0C43BF4B
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - RestApiHandler034BA627
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Default/{proxy+}/ANY/Resource
+  RestApiANYA7C1DC94:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Fn::GetAtt:
+          - RestApi0C43BF4B
+          - RootResourceId
+      RestApiId:
+        Ref: RestApi0C43BF4B
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - RestApiHandler034BA627
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: RestApiStack/RestApi/Default/ANY/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=0.28.0,@aws-cdk/assets=0.28.0,@aws-cdk/aws-apigateway=0.28.0,@aws-cdk/aws-cloudwatch=0.28.0,@aws-cdk/aws-ec2=0.28.0,@aws-cdk/aws-events=0.28.0,@aws-cdk/aws-iam=0.28.0,@aws-cdk/aws-kms=0.28.0,@aws-cdk/aws-lambda=0.28.0,@aws-cdk/aws-s3=0.28.0,@aws-cdk/aws-s3-notifications=0.28.0,@aws-cdk/aws-sqs=0.28.0,@aws-cdk/cdk=0.28.0,@aws-cdk/cx-api=0.28.0,@aws-cdk/region-info=0.28.0,jsii-runtime=node.js/v8.11.2
+Parameters:
+  RestApiHandlerCodeS3Bucket17DDE020:
+    Type: String
+    Description: S3 bucket for asset "RestApiStack/RestApiHandler/Code"
+  RestApiHandlerCodeS3VersionKeyE23BA947:
+    Type: String
+    Description: S3 key for asset version "RestApiStack/RestApiHandler/Code"
+Outputs:
+  RestApiEndpoint0551178A:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: RestApi0C43BF4B
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: RestApiDeploymentStageprod3855DE66
+          - /
+

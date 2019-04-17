@@ -7,15 +7,25 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "synth:vpc": "cdk synth --app examples/private-cloud.js > examples/private-cloud.yml",
+    "synth:api": "cdk synth --app examples/rest-api.js > examples/rest-api.yml",
+    "synth:site": "cdk synth --app examples/static-website.js > examples/static-website.yml",
+    "synth": "npm run synth:vpc && npm run synth:api && npm run synth:site"
   },
   "devDependencies": {
     "@types/node": "8.10.40",
-    "typescript": "^3.3.3333",
-    "aws-cdk": "^0.28.0"
+    "aws-cdk": "^0.28.0",
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
+    "@aws-cdk/aws-apigateway": "^0.28.0",
+    "@aws-cdk/aws-cloudfront": "^0.28.0",
+    "@aws-cdk/aws-ec2": "^0.28.0",
+    "@aws-cdk/aws-lambda": "^0.28.0",
+    "@aws-cdk/aws-s3": "^0.28.0",
     "@aws-cdk/cdk": "^0.28.0",
+    "@types/aws-lambda": "^8.10.24",
     "source-map-support": "^0.5.9"
   }
 }
