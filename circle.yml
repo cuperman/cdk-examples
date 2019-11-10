@@ -11,4 +11,4 @@ jobs:
       - checkout
       - run: apk add nodejs npm
       - run: npm install
-      - run: time npm run --silent cdk -- --app 'npm run ts-node -- ./examples/private-cloud.ts' synth
+      - run: npm run --silent cdk -- --verbose --app 'npm run ts-node -- ./examples/private-cloud.ts' synth > template.yml

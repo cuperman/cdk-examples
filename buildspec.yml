@@ -4,4 +4,4 @@ phases:
     commands:
       - apk add nodejs npm
       - npm install
-      - time npm run --silent cdk -- --app 'npm run ts-node -- ./examples/private-cloud.ts' synth
+      - npm run --silent cdk -- --verbose --app 'npm run ts-node -- ./examples/private-cloud.ts' synth > template.yml
