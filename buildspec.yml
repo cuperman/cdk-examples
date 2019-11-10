@@ -1,0 +1,7 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - apk add nodejs npm
+      - npm install
+      - time npm run --silent cdk -- --app 'npm run ts-node -- ./examples/private-cloud.ts' synth
