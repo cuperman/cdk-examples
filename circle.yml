@@ -4,6 +4,9 @@ jobs:
     docker:
       - image: alpine:3.10
     working_directory: ~/repo
+    environment:
+      - AWS_REGION: us-east-1
+      - AWS_DEFAULT_REGION: us-east-1
     steps:
       - checkout
       - run: apk add nodejs npm
