@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import { Stack, Construct, StackProps, App } from '@aws-cdk/cdk';
+import { Stack, Construct, StackProps, App } from '@aws-cdk/core';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { CloudFrontWebDistribution } from '@aws-cdk/aws-cloudfront';
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import { Stack, Construct, StackProps, App } from '@aws-cdk/cdk';
+import { Stack, Construct, StackProps, App } from '@aws-cdk/core';
 import { Function, Runtime, Code } from '@aws-cdk/aws-lambda';
 import { LambdaRestApi } from '@aws-cdk/aws-apigateway';
 
@@ -15,7 +15,7 @@ class RestApiStack extends Stack {
     const restApiHandler = new Function(this, 'RestApiHandler', {
       code: Code.asset('./handlers/rest-api'),
       handler: 'index.handler',
-      runtime: Runtime.NodeJS810
+      runtime: Runtime.NODEJS_8_10
     });
 
     // https://awslabs.github.io/aws-cdk/refs/_aws-cdk_aws-apigateway.html#lambdarestapi
