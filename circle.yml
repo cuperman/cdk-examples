@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: alpine:3.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: apk add nodejs npm
+      - run: npm install
+      - run: time npm run --silent cdk -- --app 'npm run ts-node -- ./examples/private-cloud.ts' synth
